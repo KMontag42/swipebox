@@ -21,6 +21,7 @@
 				afterMedia: null,
 				nextSlide: null,
 				prevSlide: null,
+				lastSlide: null,
 				loopAtEnd: false,
 				autoplayVideos: false,
 				queryStringData: {},
@@ -756,7 +757,7 @@
 				if ( a.search ) {
 					qs = JSON.parse( '{"' + a.search.toLowerCase().replace('?','').replace(/&/g,'","').replace(/=/g,'":"') + '"}' );
 				}
-				
+
 				// Extend with custom data
 				if ( $.isPlainObject( customData ) ) {
 					qs = $.extend( qs, customData, plugin.settings.queryStringData ); // The dev has always the final word
@@ -866,10 +867,14 @@
 							plugin.settings.nextSlide(index);
 						}
 					} else {
-						$( '#swipebox-overlay' ).addClass( 'rightSpring' );
-						setTimeout( function() {
-							$( '#swipebox-overlay' ).removeClass( 'rightSpring' );
-						}, 500 );
+						if ( plugin.settings.lastSlide ) {
+							plugin.settings.lastSlide(index);
+						} else {
+							$( '#swipebox-overlay' ).addClass( 'rightSpring' );
+							setTimeout( function() {
+								$( '#swipebox-overlay' ).removeClass( 'rightSpring' );
+							}, 500 );
+						}
 					}
 				}
 			},
